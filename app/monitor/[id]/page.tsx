@@ -139,27 +139,85 @@ export default async function MonitorDetailPage({
         {history.length > 0 && (
           <div>
             <h2 className="font-semibold text-sm uppercase tracking-wide text-muted-foreground mb-4">
-              History
+              History ({history.length} entries)
             </h2>
-            <div className="space-y-2">
+            <div className="space-y-4">
               {history.map((log) => (
                 <div
                   key={log.id}
-                  className="flex items-center justify-between rounded-lg border bg-card px-4 py-3 text-sm"
+                  className="rounded-lg border bg-card p-4 space-y-3"
                 >
-                  <div className="flex items-center gap-3">
+                  <div className="flex items-center justify-between">
                     <StatusBadge status={log.status} />
-                    <span className="text-muted-foreground">
+                    <span className="text-xs text-muted-foreground">
                       {formatDistanceToNow(new Date(log.last_check), { addSuffix: true })}
                     </span>
-                    {log.notes && (
-                      <span className="text-muted-foreground truncate max-w-xs hidden sm:block">
-                        {log.notes}
-                      </span>
+                  </div>
+                  
+                  <div className="grid grid-cols-2 gap-3 text-sm">
+                    {log.last_run && (
+                      <div>
+                        <p className="text-muted-foreground text-xs">Last run</p>
+                        <p className="font-medium flex items-center gap-2">
+                          {formatDistanceToNow(new Date(log.last_run), { addSuffix: true })}
+                          {log.last_run_outcome && (
+                            <RunOutcomeBadge outcome={log.last_run_outcome} />
+                          )}
+                        </p>
+                      </div>
+                    )}
+                    {log.last_commit_sha && (
+                      <div>
+                        <p className="text-muted-foreground text-xs">Last commit</p>
+                        <p className="font-mono text-xs font-medium">
+                          {log.last_commit_sha}
+                          {log.last_commit_repo && (
+                            <span className="text-muted-foreground font-sans ml-2">
+                              {log.last_commit_repo}
+                            </span>
+                          )}
+                        </p>
+                        {log.last_commit_message && (
+                          <p className="text-muted-foreground text-xs truncate">{log.last_commit_message}</p>
+                        )}
+                      </div>
+                    )}
+                    {log.checks_total != null && (
+                      <div>
+                        <p className="text-muted-foreground text-xs">Checks</p>
+                        <p className="font-medium text-xs">
+                          <span className="text-green-600">{log.checks_passed} passed</span>
+                          {" · "}
+                          <span className="text-red-500">{log.checks_failed} failed</span>
+                          {" · "}
+                          {log.checks_total} total
+                        </p>
+                      </div>
                     )}
                   </div>
-                  {log.last_run_outcome && (
-                    <RunOutcomeBadge outcome={log.last_run_outcome} />
+                  
+                  {log.notes && (
+                    <div className="pt-2 border-t text-xs text-muted-foreground">
+                      {log.notes}
+                    </div>
+                  )}
+                  {log.linear_issues_filed && log.linear_issues_filed.length > 0 && (
+                    <div className="pt-2 border-t">
+                      <p className="text-xs text-muted-foreground mb-1">Issues filed</p>
+                      <div className="flex flex-wrap gap-2">
+                        {log.linear_issues_filed.map((issue: string) => (
+                          <a
+                            key={issue}
+                            href={`https://linear.app/issue/${issue}`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-xs font-mono bg-muted px-2 py-1 rounded hover:bg-muted/70 transition-colors"
+                          >
+                            {issue}
+                          </a>
+                        ))}
+                      </div>
+                    </div>
                   )}
                 </div>
               ))}
