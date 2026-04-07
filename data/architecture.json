@@ -1,6 +1,6 @@
 {
   "pipeline": {
-    "description": "Each pi monitor runs in a dedicated tmux session on a Mac mini in Bhutan. Monitors poll GitHub for new commits every 30 minutes and run E2E tests when changes are detected. Results are logged locally and pushed to Supabase after every cycle. This website reads from Supabase and auto-refreshes every 30 seconds.",
+    "description": "Each pi monitor runs in a dedicated tmux session on a Mac mini in Bhutan. Monitors poll GitHub for new commits every 30 minutes and run E2E tests when changes are detected. Hyperindex additionally runs a write-through pipeline test every 15 minutes — creating a real ATProto record and measuring how long it takes to flow through the TAP subscription into the GraphQL API. Results are logged locally and pushed to Supabase after every cycle. This website reads from Supabase and auto-refreshes every 30 seconds.",
     "steps": [
       { "label": "Pi Monitor", "detail": "Runs in tmux on Mac mini, polls every 30 min" },
       { "label": "GitHub API", "detail": "Checks for new commits on watched repos" },
@@ -54,22 +54,23 @@
     {
       "id": "hyperindex",
       "name": "Hyperindex",
-      "purpose": "Health monitor for the Hyperindex GraphQL API — a Go ATProto AppView that indexes Hypersphere records. Runs a lightweight health check every 30 minutes and a full suite on new commits. Also validates that all indexed collections belong to expected Hypersphere namespaces.",
+      "purpose": "Health monitor for the Hyperindex GraphQL API — a Go ATProto AppView that indexes Hypersphere records. Runs a lightweight health check every 30 minutes, a write-through pipeline test every 15 minutes, and a full suite on new commits. Also validates that all indexed collections belong to expected Hypersphere namespaces.",
       "app_url": "https://hi.gainforest.app",
       "api_url": "https://api.hi.gainforest.app/graphql",
       "repos": ["hypercerts-org/hyperindex"],
       "session": "hyperindex-test",
-      "interval": "30 min",
-      "trigger": "Always (health check) + new commits on hypercerts-org/hyperindex (full suite)",
+      "interval": "30 min health check, 15 min write-through",
+      "trigger": "Always (health check + write-through) + new commits on hypercerts-org/hyperindex (full suite)",
       "log": "/tmp/hyperindex_check.log",
       "test_types": [
         "API reachability",
         "Key collection totalCount checks",
         "collectionStats sanity check",
         "Namespace validation — flags collections outside allowed domains (gainforest, hypercerts, hyperboards, certified, bumicerts, simocracy)",
-        "Full suite: schema integrity, search query, collectionTimeSeries"
+        "Full suite: schema integrity, search query, collectionTimeSeries",
+        "Write-through pipeline test — creates a real ATProto record on certified.one PDS, measures ingestion lag via TAP subscription, tests update and delete propagation. Alerts if any operation exceeds 5s."
       ],
-      "stack": ["curl", "bash", "GraphQL", "Linear (issue filing)"]
+      "stack": ["curl", "bash", "GraphQL", "Node.js (write-through-test.js)", "Linear (issue filing)"]
     },
     {
       "id": "certified",
