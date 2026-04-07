@@ -123,7 +123,7 @@ export default async function MonitorDetailPage({
 
             {latest.notes && (
               <div className="mt-4 pt-4 border-t border-border">
-                <p className="text-sm text-muted-foreground">{latest.notes}</p>
+                <p className="text-sm text-muted-foreground font-mono">{latest.notes}</p>
               </div>
             )}
 
