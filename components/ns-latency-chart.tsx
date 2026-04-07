@@ -35,7 +35,7 @@ export function NsLatencyChart({ logs }: NsLatencyChartProps) {
     .map((log) => {
       const nsLatency = log.misc_data?.integrity_check?.ns_latency_avg_ms as NsLatencyData | null;
       const point: NsLatencyData = {
-        time: format(new Date(log.last_check), "HH:mm"),
+        timestamp: new Date(log.last_check).getTime(),
         fullTime: new Date(log.last_check).toISOString(),
       };
       
@@ -68,7 +68,12 @@ export function NsLatencyChart({ logs }: NsLatencyChartProps) {
           <LineChart data={data} margin={{ top: 5, right: 5, left: 0, bottom: 5 }}>
             <CartesianGrid strokeDasharray="3 3" stroke="#27272a" />
             <XAxis
-              dataKey="time"
+              dataKey="timestamp"
+              type="number"
+              scale="time"
+              domain={["dataMin", "dataMax"]}
+              tickCount={8}
+              tickFormatter={(v) => format(new Date(v), "MMM d, HH:mm")}
               tick={{ fontSize: 10, fill: "#71717a", fontFamily: "var(--font-mono)" }}
               axisLine={{ stroke: "#27272a" }}
               tickLine={{ stroke: "#27272a" }}
@@ -80,10 +85,14 @@ export function NsLatencyChart({ logs }: NsLatencyChartProps) {
               tickFormatter={(v) => `${v}ms`}
             />
             <Tooltip
-              labelFormatter={(_, payload) => payload?.[0]?.payload?.fullTime ?? ""}
-              formatter={(value) => [
-                value != null ? `${Number(value).toLocaleString()}ms` : "N/A",
-              ]}
+              labelFormatter={(_, payload) => {
+                const iso = payload?.[0]?.payload?.fullTime;
+                return iso ? format(new Date(iso), "MMM d, HH:mm") : "";
+              }}
+              formatter={(value, name) => {
+                if (value == null) return null;
+                return [`${Number(value).toLocaleString()}ms`, name];
+              }}
               contentStyle={{
                 backgroundColor: "#111116",
                 border: "1px solid #27272a",

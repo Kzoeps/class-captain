@@ -32,7 +32,7 @@ export function LatencyChart({ logs }: LatencyChartProps) {
       log.misc_data?.delete_lag_ms != null
     )
     .map((log) => ({
-      time: format(new Date(log.last_check), "HH:mm"),
+      timestamp: new Date(log.last_check).getTime(),
       fullTime: new Date(log.last_check).toISOString(),
       create: log.misc_data?.create_lag_ms ?? null,
       update: log.misc_data?.update_lag_ms ?? null,
@@ -61,8 +61,12 @@ export function LatencyChart({ logs }: LatencyChartProps) {
           <LineChart data={data} margin={{ top: 5, right: 5, left: 0, bottom: 5 }}>
             <CartesianGrid strokeDasharray="3 3" stroke="#27272a" />
             <XAxis
-              dataKey="time"
-              interval={Math.max(0, Math.floor(data.length / 8) - 1)}
+              dataKey="timestamp"
+              type="number"
+              scale="time"
+              domain={["dataMin", "dataMax"]}
+              tickCount={8}
+              tickFormatter={(v) => format(new Date(v), "MMM d, HH:mm")}
               tick={{ fontSize: 10, fill: "#71717a", fontFamily: "var(--font-mono)" }}
               axisLine={{ stroke: "#27272a" }}
               tickLine={{ stroke: "#27272a" }}
@@ -78,10 +82,10 @@ export function LatencyChart({ logs }: LatencyChartProps) {
                 const iso = payload?.[0]?.payload?.fullTime;
                 return iso ? format(new Date(iso), "MMM d, HH:mm") : "";
               }}
-              formatter={(value, name) => [
-                value != null ? `${Number(value).toLocaleString()}ms` : "N/A",
-                name,
-              ]}
+              formatter={(value, name) => {
+                if (value == null) return null;
+                return [`${Number(value).toLocaleString()}ms`, name];
+              }}
               contentStyle={{
                 backgroundColor: "#111116",
                 border: "1px solid #27272a",
