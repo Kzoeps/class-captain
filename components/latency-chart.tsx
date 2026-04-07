@@ -78,6 +78,7 @@ export function LatencyChart({ logs }: LatencyChartProps) {
               stroke="#22c55e"
               strokeWidth={2}
               dot={false}
+              activeDot={{ r: 4 }}
               connectNulls
             />
             <Line
@@ -87,6 +88,7 @@ export function LatencyChart({ logs }: LatencyChartProps) {
               stroke="#22d3ee"
               strokeWidth={2}
               dot={false}
+              activeDot={{ r: 4 }}
               connectNulls
             />
             <Line
@@ -96,6 +98,7 @@ export function LatencyChart({ logs }: LatencyChartProps) {
               stroke="#f472b6"
               strokeWidth={2}
               dot={false}
+              activeDot={{ r: 4 }}
               connectNulls
             />
           </LineChart>
