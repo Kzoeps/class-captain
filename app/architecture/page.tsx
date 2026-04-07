@@ -15,13 +15,13 @@ export default function ArchitecturePage() {
         <h1 className="text-2xl font-bold tracking-tight font-heading mb-2" style={{ letterSpacing: "-0.02em" }}>
           Architecture
         </h1>
-        <p className="text-muted-foreground text-sm mb-8">
+        <p className="text-muted-foreground text-sm mb-8 font-mono">
           Hypersphere monitoring stack
         </p>
 
         <div className="rounded-lg bg-card border border-border p-5 mb-8">
           <h2 className="text-xs text-muted-foreground uppercase tracking-wider font-mono mb-3">Pipeline</h2>
-          <p className="text-sm text-muted-foreground mb-5">{architecture.pipeline.description}</p>
+          <p className="text-sm text-muted-foreground mb-5 font-mono">{architecture.pipeline.description}</p>
           <div className="flex flex-wrap items-center gap-2">
             {architecture.pipeline.steps.map((step, i) => (
               <div key={i} className="flex items-center gap-2">
@@ -45,7 +45,7 @@ export default function ArchitecturePage() {
               <div className="flex items-start justify-between mb-4">
                 <div>
                   <h3 className="font-semibold font-heading text-lg">{monitor.name}</h3>
-                  <p className="text-sm text-muted-foreground mt-1">{monitor.purpose}</p>
+                  <p className="text-sm text-muted-foreground mt-1 font-mono">{monitor.purpose}</p>
                 </div>
                 <Link
                   href={`/monitor/${monitor.id}`}

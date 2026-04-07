@@ -64,7 +64,7 @@ export default async function MonitorDetailPage({
               {monitor.name}
             </h1>
             {monitor.description && (
-              <p className="text-muted-foreground text-sm mt-1">{monitor.description}</p>
+              <p className="text-muted-foreground text-sm mt-1 font-mono">{monitor.description}</p>
             )}
           </div>
           {latest && <StatusBadge status={latest.status} large />}
@@ -167,7 +167,7 @@ export default async function MonitorDetailPage({
         {arch && (
           <div className="rounded-lg bg-card border border-border p-5 mb-6">
             <h2 className="text-xs text-muted-foreground uppercase tracking-wider font-mono mb-3">About</h2>
-            <p className="text-sm text-muted-foreground mb-4">{arch.purpose}</p>
+            <p className="text-sm text-muted-foreground mb-4 font-mono">{arch.purpose}</p>
 
             <div className="grid grid-cols-2 gap-3 text-sm">
               <div>
@@ -260,6 +260,12 @@ export default async function MonitorDetailPage({
                         <span className="text-[var(--status-failing)]">{log.checks_failed}✗</span>
                         <span className="text-muted-foreground">({log.checks_total})</span>
                       </div>
+                    )}
+                    {log.notes && (
+                      <p className="text-xs text-muted-foreground font-mono">{log.notes}</p>
+                    )}
+                    {!log.last_run && !log.last_commit_sha && log.checks_total == null && !log.notes && (
+                      <p className="text-xs text-muted-foreground italic">Health check</p>
                     )}
                   </div>
 
