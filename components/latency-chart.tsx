@@ -16,6 +16,12 @@ interface LatencyChartProps {
   logs: StatusLogWithMiscData[];
 }
 
+const LINES = [
+  { key: "create", label: "Create", color: "#22c55e" },
+  { key: "update", label: "Update", color: "#22d3ee" },
+  { key: "delete", label: "Delete", color: "#f472b6" },
+];
+
 export function LatencyChart({ logs }: LatencyChartProps) {
   const data = logs
     .slice()
@@ -28,7 +34,11 @@ export function LatencyChart({ logs }: LatencyChartProps) {
       delete: log.misc_data?.delete_lag_ms ?? null,
     }));
 
-  if (data.length === 0) {
+  const hasData = data.some((d) =>
+    d.create != null || d.update != null || d.delete != null
+  );
+
+  if (!hasData) {
     return (
       <div className="rounded-lg bg-card border border-border p-6 mb-6 text-center">
         <p className="text-sm text-muted-foreground">No latency data available yet.</p>
@@ -71,52 +81,29 @@ export function LatencyChart({ logs }: LatencyChartProps) {
               }}
               labelStyle={{ color: "#e4e4e7" }}
             />
-            <Line
-              type="monotone"
-              dataKey="create"
-              name="Create"
-              stroke="#22c55e"
-              strokeWidth={2}
-              dot={false}
-              activeDot={{ r: 4 }}
-              connectNulls
-            />
-            <Line
-              type="monotone"
-              dataKey="update"
-              name="Update"
-              stroke="#22d3ee"
-              strokeWidth={2}
-              dot={false}
-              activeDot={{ r: 4 }}
-              connectNulls
-            />
-            <Line
-              type="monotone"
-              dataKey="delete"
-              name="Delete"
-              stroke="#f472b6"
-              strokeWidth={2}
-              dot={false}
-              activeDot={{ r: 4 }}
-              connectNulls
-            />
+            {LINES.map((line) => (
+              <Line
+                key={line.key}
+                type="monotone"
+                dataKey={line.key}
+                name={line.label}
+                stroke={line.color}
+                strokeWidth={2}
+                dot={false}
+                activeDot={{ r: 4 }}
+                connectNulls
+              />
+            ))}
           </LineChart>
         </ResponsiveContainer>
       </div>
-      <div className="flex items-center justify-center gap-6 mt-3">
-        <div className="flex items-center gap-2">
-          <span className="w-2 h-0.5 bg-[#22c55e] rounded" />
-          <span className="text-xs text-muted-foreground">Create</span>
-        </div>
-        <div className="flex items-center gap-2">
-          <span className="w-2 h-0.5 bg-[#22d3ee] rounded" />
-          <span className="text-xs text-muted-foreground">Update</span>
-        </div>
-        <div className="flex items-center gap-2">
-          <span className="w-2 h-0.5 bg-[#f472b6] rounded" />
-          <span className="text-xs text-muted-foreground">Delete</span>
-        </div>
+      <div className="flex items-center justify-center gap-4 mt-3 flex-wrap">
+        {LINES.map((line) => (
+          <div key={line.key} className="flex items-center gap-2">
+            <span className="w-2 h-0.5 bg-[#27272a] rounded" style={{ backgroundColor: line.color }} />
+            <span className="text-xs text-muted-foreground font-mono">{line.label}</span>
+          </div>
+        ))}
       </div>
     </div>
   );
