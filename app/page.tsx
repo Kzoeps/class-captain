@@ -35,10 +35,17 @@ export default async function DashboardPage() {
     <main className="min-h-screen bg-background">
       <div className="max-w-5xl mx-auto px-4 py-12">
         <div className="mb-10">
-          <h1 className="text-3xl font-bold tracking-tight">Class Captain</h1>
-          <p className="text-muted-foreground mt-1">
-            Agent monitoring dashboard · auto-refreshes every 30s
-          </p>
+          <div className="flex items-end justify-between">
+            <div>
+              <h1 className="text-3xl font-bold tracking-tight">Class Captain</h1>
+              <p className="text-muted-foreground mt-1">
+                Agent monitoring dashboard · auto-refreshes every 30s
+              </p>
+            </div>
+            <a href="/architecture" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
+              Architecture →
+            </a>
+          </div>
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           {monitorsWithStatus.map((monitor) => (

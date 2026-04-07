@@ -1,4 +1,5 @@
 import { createClient } from "@/lib/supabase/server";
+import architecture from "@/data/architecture.json";
 import { notFound } from "next/navigation";
 import { StatusBadge } from "@/components/status-badge";
 import { RunOutcomeBadge } from "@/components/run-outcome-badge";
@@ -15,6 +16,7 @@ export default async function MonitorDetailPage({
 }) {
   const { id } = await params;
   const supabase = await createClient();
+  const arch = architecture.monitors.find((m) => m.id === id) ?? null;
 
   const { data: monitor } = await supabase
     .from("monitors")
@@ -133,6 +135,54 @@ export default async function MonitorDetailPage({
         ) : (
           <div className="rounded-lg border bg-muted/40 p-6 mb-8 text-center text-muted-foreground text-sm">
             No status logged yet.
+          </div>
+        )}
+
+        {arch && (
+          <div className="rounded-lg border bg-card p-6 mb-8 space-y-4">
+            <h2 className="font-semibold text-sm uppercase tracking-wide text-muted-foreground">About</h2>
+            <p className="text-sm text-muted-foreground">{arch.purpose}</p>
+            <div className="grid grid-cols-2 gap-4 text-sm">
+              <div>
+                <p className="text-muted-foreground text-xs">Interval</p>
+                <p className="font-medium">{arch.interval}</p>
+              </div>
+              <div>
+                <p className="text-muted-foreground text-xs">Session</p>
+                <code className="text-xs bg-muted px-1.5 py-0.5 rounded">{arch.session}</code>
+              </div>
+              {arch.repos.length > 0 && (
+                <div className="col-span-2">
+                  <p className="text-muted-foreground text-xs mb-1">Repos watched</p>
+                  <div className="flex flex-wrap gap-2">
+                    {arch.repos.map((repo) => (
+                      <a key={repo} href={`https://github.com/${repo}`} target="_blank" rel="noopener noreferrer"
+                        className="text-xs bg-muted px-2 py-0.5 rounded hover:bg-muted/70 transition-colors font-mono">
+                        {repo}
+                      </a>
+                    ))}
+                  </div>
+                </div>
+              )}
+              <div className="col-span-2">
+                <p className="text-muted-foreground text-xs mb-1">What it tests</p>
+                <ul className="space-y-1">
+                  {arch.test_types.map((t, i) => (
+                    <li key={i} className="text-xs text-muted-foreground flex gap-1.5">
+                      <span className="text-foreground mt-0.5">·</span> {t}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+              <div className="col-span-2">
+                <p className="text-muted-foreground text-xs mb-2">Stack</p>
+                <div className="flex flex-wrap gap-1.5">
+                  {arch.stack.map((s, i) => (
+                    <span key={i} className="text-xs bg-muted px-2 py-0.5 rounded">{s}</span>
+                  ))}
+                </div>
+              </div>
+            </div>
           </div>
         )}
 

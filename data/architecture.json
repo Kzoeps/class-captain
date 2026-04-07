@@ -1,0 +1,113 @@
+{
+  "pipeline": {
+    "description": "Each pi monitor runs in a dedicated tmux session on a Mac mini in Bhutan. Monitors poll GitHub for new commits every 30 minutes and run E2E tests when changes are detected. Results are logged locally and pushed to Supabase after every cycle. This website reads from Supabase and auto-refreshes every 30 seconds.",
+    "steps": [
+      { "label": "Pi Monitor", "detail": "Runs in tmux on Mac mini, polls every 30 min" },
+      { "label": "GitHub API", "detail": "Checks for new commits on watched repos" },
+      { "label": "E2E Tests", "detail": "playwright-cli, bash scripts, GraphQL queries" },
+      { "label": "Supabase", "detail": "Status logged after every cycle via log-status.js" },
+      { "label": "This Website", "detail": "Reads Supabase, auto-refreshes every 30s" }
+    ]
+  },
+  "monitors": [
+    {
+      "id": "bumicerts",
+      "name": "Bumicerts",
+      "purpose": "E2E monitor for the Bumicerts impact certificate marketplace. Watches for new commits and runs full auth and UI flows including real OTP email sign-in via mail.tm.",
+      "app_url": "https://alpha.fund.gainforest.app",
+      "repos": ["GainForest/atproto-packages"],
+      "session": "bumicerts-monitor",
+      "interval": "30 min",
+      "trigger": "New commits on GainForest/atproto-packages main",
+      "log": "/tmp/atproto_check.log",
+      "test_types": [
+        "Homepage load",
+        "Handle-based sign-in flow",
+        "Email OTP sign-in — new user (with handle creation)",
+        "Email OTP sign-in — returning user",
+        "Auth-gated walls on /bumicert/create",
+        "/explore project grid load"
+      ],
+      "stack": ["playwright-cli", "mail.tm (OTP email)", "Linear (issue filing)"]
+    },
+    {
+      "id": "hyperboards",
+      "name": "Hyperboards",
+      "purpose": "E2E monitor and ATProto record validator for Hyperboards. Runs a full UI flow to create boards, then validates every created ATProto record against the canonical hypercerts lexicon.",
+      "app_url": "https://hyperboards.org",
+      "repos": [
+        "hypercerts-org/hyperboards",
+        "hypercerts-org/hypercerts-lexicon"
+      ],
+      "session": "hyperboards-test",
+      "interval": "30 min",
+      "trigger": "New commits on either watched repo",
+      "log": "/tmp/hyperboards_check.log",
+      "test_types": [
+        "Full UI flow — create boards via playwright-cli",
+        "ATProto record validation against canonical lexicon",
+        "Schema integrity checks (uri, did, value fields)",
+        "Union field $type validation"
+      ],
+      "stack": ["playwright-cli", "@hypercerts-org/lexicon", "Linear (issue filing)"]
+    },
+    {
+      "id": "hyperindex",
+      "name": "Hyperindex",
+      "purpose": "Health monitor for the Hyperindex GraphQL API — a Go ATProto AppView that indexes Hypersphere records. Runs a lightweight health check every 30 minutes and a full suite on new commits. Also validates that all indexed collections belong to expected Hypersphere namespaces.",
+      "app_url": "https://hi.gainforest.app",
+      "api_url": "https://api.hi.gainforest.app/graphql",
+      "repos": ["hypercerts-org/hyperindex"],
+      "session": "hyperindex-test",
+      "interval": "30 min",
+      "trigger": "Always (health check) + new commits on hypercerts-org/hyperindex (full suite)",
+      "log": "/tmp/hyperindex_check.log",
+      "test_types": [
+        "API reachability",
+        "Key collection totalCount checks",
+        "collectionStats sanity check",
+        "Namespace validation — flags collections outside allowed domains (gainforest, hypercerts, hyperboards, certified, bumicerts, simocracy)",
+        "Full suite: schema integrity, search query, collectionTimeSeries"
+      ],
+      "stack": ["curl", "bash", "GraphQL", "Linear (issue filing)"]
+    },
+    {
+      "id": "certified",
+      "name": "Certified",
+      "purpose": "E2E monitor for Certified.app — the ATProto identity provider used across the Hypersphere ecosystem. Runs light health checks every 30 minutes and a full OTP sign-in UI flow daily and on new commits.",
+      "app_url": "https://certified.app",
+      "repos": ["hypercerts-org/certified-app"],
+      "session": "certified-monitor",
+      "interval": "30 min",
+      "trigger": "Always (health check) + new commits on hypercerts-org/certified-app (full suite) + daily UI flow",
+      "log": "/tmp/certified_check.log",
+      "test_types": [
+        "Homepage load (HTTP 200)",
+        "Sign in button presence",
+        "Auth server reachability (auth.certified.one)",
+        "PDS health (certified.one)",
+        "Full UI flow: OTP sign-in, profile, edit profile, apps, settings, sign out"
+      ],
+      "stack": ["bash (health check)", "playwright-cli (UI flow)", "mail.tm (OTP email)", "Linear (issue filing)"]
+    },
+    {
+      "id": "digest",
+      "name": "Morning Digest",
+      "purpose": "Daily morning summary sent to Karma via Telegram at 7:30am BTT. Reads all monitor logs, checks session health, triggers the Certified.app daily UI flow, and composes a concise health report.",
+      "app_url": null,
+      "repos": [],
+      "session": "class-captain",
+      "interval": "Daily at 7:30am BTT (UTC+6)",
+      "trigger": "Timer — fires once per day",
+      "log": null,
+      "test_types": [
+        "Tails last 20 lines of all monitor logs",
+        "Checks all tmux sessions are running",
+        "Triggers certified.app daily UI flow",
+        "Sends Telegram digest message",
+        "Logs digest status to Supabase"
+      ],
+      "stack": ["curl (Telegram API)", "tmux", "Supabase"]
+    }
+  ]
+}
