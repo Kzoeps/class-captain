@@ -7,7 +7,6 @@ import {
   YAxis,
   CartesianGrid,
   Tooltip,
-  Legend,
   ResponsiveContainer,
 } from "recharts";
 import { format } from "date-fns";
@@ -31,29 +30,31 @@ export function LatencyChart({ logs }: LatencyChartProps) {
 
   if (data.length === 0) {
     return (
-      <div className="rounded-lg border bg-card p-6 mb-8 text-center text-muted-foreground text-sm">
-        No latency data available yet.
+      <div className="rounded-lg bg-card border border-border p-6 mb-6 text-center">
+        <p className="text-sm text-muted-foreground">No latency data available yet.</p>
       </div>
     );
   }
 
   return (
-    <div className="rounded-lg border bg-card p-6 mb-8">
-      <h2 className="font-semibold text-sm uppercase tracking-wide text-muted-foreground mb-4">
-        Write Latency (ms)
+    <div className="rounded-lg bg-card border border-border p-5 mb-6">
+      <h2 className="text-xs text-muted-foreground uppercase tracking-wider font-mono mb-4">
+        Write Latency
       </h2>
-      <div className="h-64">
+      <div className="h-56">
         <ResponsiveContainer width="100%" height="100%">
-          <LineChart data={data} margin={{ top: 5, right: 20, left: 0, bottom: 5 }}>
-            <CartesianGrid strokeDasharray="3 3" className="stroke-muted" />
+          <LineChart data={data} margin={{ top: 5, right: 5, left: 0, bottom: 5 }}>
+            <CartesianGrid strokeDasharray="3 3" stroke="#27272a" />
             <XAxis
               dataKey="time"
-              tick={{ fontSize: 12 }}
-              className="text-muted-foreground"
+              tick={{ fontSize: 10, fill: "#71717a", fontFamily: "var(--font-mono)" }}
+              axisLine={{ stroke: "#27272a" }}
+              tickLine={{ stroke: "#27272a" }}
             />
             <YAxis
-              tick={{ fontSize: 12 }}
-              className="text-muted-foreground"
+              tick={{ fontSize: 10, fill: "#71717a", fontFamily: "var(--font-mono)" }}
+              axisLine={{ stroke: "#27272a" }}
+              tickLine={{ stroke: "#27272a" }}
               tickFormatter={(v) => `${(v / 1000).toFixed(1)}s`}
             />
             <Tooltip
@@ -62,13 +63,14 @@ export function LatencyChart({ logs }: LatencyChartProps) {
                 value != null ? `${Number(value).toLocaleString()}ms` : "N/A",
               ]}
               contentStyle={{
-                backgroundColor: "var(--background)",
-                border: "1px solid var(--border)",
+                backgroundColor: "#111116",
+                border: "1px solid #27272a",
                 borderRadius: "0.5rem",
                 fontSize: "0.75rem",
+                fontFamily: "var(--font-mono)",
               }}
+              labelStyle={{ color: "#e4e4e7" }}
             />
-            <Legend wrapperStyle={{ fontSize: "0.75rem" }} />
             <Line
               type="monotone"
               dataKey="create"
@@ -82,7 +84,7 @@ export function LatencyChart({ logs }: LatencyChartProps) {
               type="monotone"
               dataKey="update"
               name="Update"
-              stroke="#3b82f6"
+              stroke="#22d3ee"
               strokeWidth={2}
               dot={false}
               connectNulls
@@ -91,13 +93,27 @@ export function LatencyChart({ logs }: LatencyChartProps) {
               type="monotone"
               dataKey="delete"
               name="Delete"
-              stroke="#f97316"
+              stroke="#f472b6"
               strokeWidth={2}
               dot={false}
               connectNulls
             />
           </LineChart>
         </ResponsiveContainer>
+      </div>
+      <div className="flex items-center justify-center gap-6 mt-3">
+        <div className="flex items-center gap-2">
+          <span className="w-2 h-0.5 bg-[#22c55e] rounded" />
+          <span className="text-xs text-muted-foreground">Create</span>
+        </div>
+        <div className="flex items-center gap-2">
+          <span className="w-2 h-0.5 bg-[#22d3ee] rounded" />
+          <span className="text-xs text-muted-foreground">Update</span>
+        </div>
+        <div className="flex items-center gap-2">
+          <span className="w-2 h-0.5 bg-[#f472b6] rounded" />
+          <span className="text-xs text-muted-foreground">Delete</span>
+        </div>
       </div>
     </div>
   );

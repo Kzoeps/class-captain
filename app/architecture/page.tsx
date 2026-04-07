@@ -1,113 +1,111 @@
 import Link from "next/link";
-import { ArrowRight } from "lucide-react";
 import architecture from "@/data/architecture.json";
 
 export default function ArchitecturePage() {
   return (
-    <main className="min-h-screen bg-background">
-      <div className="max-w-4xl mx-auto px-4 py-12">
+    <main className="min-h-screen grid-bg">
+      <div className="max-w-2xl mx-auto px-4 py-6 pb-20">
+        <Link href="/" className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-[var(--accent-cyan)] mb-6 transition-colors">
+          <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+            <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18" />
+          </svg>
+          Dashboard
+        </Link>
 
-        <div className="mb-10">
-          <Link href="/" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
-            ← Back to dashboard
-          </Link>
-          <h1 className="text-3xl font-bold tracking-tight mt-4">Architecture</h1>
-          <p className="text-muted-foreground mt-1">
-            How the Hypersphere monitoring stack works
-          </p>
-        </div>
+        <h1 className="text-2xl font-bold tracking-tight font-heading mb-2" style={{ letterSpacing: "-0.02em" }}>
+          Architecture
+        </h1>
+        <p className="text-muted-foreground text-sm mb-8">
+          Hypersphere monitoring stack
+        </p>
 
-        {/* Pipeline */}
-        <section className="mb-12">
-          <h2 className="text-sm font-semibold uppercase tracking-wide text-muted-foreground mb-4">Pipeline</h2>
-          <p className="text-sm text-muted-foreground mb-6">{architecture.pipeline.description}</p>
+        <div className="rounded-lg bg-card border border-border p-5 mb-8">
+          <h2 className="text-xs text-muted-foreground uppercase tracking-wider font-mono mb-3">Pipeline</h2>
+          <p className="text-sm text-muted-foreground mb-5">{architecture.pipeline.description}</p>
           <div className="flex flex-wrap items-center gap-2">
             {architecture.pipeline.steps.map((step, i) => (
               <div key={i} className="flex items-center gap-2">
-                <div className="rounded-lg border bg-card px-4 py-2 text-sm">
-                  <p className="font-medium">{step.label}</p>
+                <div className="rounded bg-muted px-3 py-2">
+                  <p className="text-sm font-mono">{step.label}</p>
                   <p className="text-xs text-muted-foreground">{step.detail}</p>
                 </div>
                 {i < architecture.pipeline.steps.length - 1 && (
-                  <ArrowRight className="w-4 h-4 text-muted-foreground shrink-0" />
+                  <svg className="w-4 h-4 text-muted-foreground shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
+                  </svg>
                 )}
               </div>
             ))}
           </div>
-        </section>
+        </div>
 
-        {/* Monitors */}
-        <section>
-          <h2 className="text-sm font-semibold uppercase tracking-wide text-muted-foreground mb-4">Monitors</h2>
-          <div className="space-y-6">
-            {architecture.monitors.map((monitor) => (
-              <div key={monitor.id} className="rounded-xl border bg-card p-6 space-y-4">
-                <div className="flex items-start justify-between">
-                  <div>
-                    <h3 className="font-semibold text-lg">{monitor.name}</h3>
-                    <p className="text-sm text-muted-foreground mt-1">{monitor.purpose}</p>
-                  </div>
-                  <Link
-                    href={`/monitor/${monitor.id}`}
-                    className="text-xs text-muted-foreground hover:text-foreground transition-colors shrink-0 ml-4"
-                  >
-                    View status →
-                  </Link>
+        <div className="space-y-4">
+          {architecture.monitors.map((monitor) => (
+            <div key={monitor.id} className="rounded-lg bg-card border border-border p-5">
+              <div className="flex items-start justify-between mb-4">
+                <div>
+                  <h3 className="font-semibold font-heading text-lg">{monitor.name}</h3>
+                  <p className="text-sm text-muted-foreground mt-1">{monitor.purpose}</p>
                 </div>
+                <Link
+                  href={`/monitor/${monitor.id}`}
+                  className="text-xs text-muted-foreground hover:text-[var(--accent-cyan)] transition-colors shrink-0 ml-4"
+                >
+                  Status →
+                </Link>
+              </div>
 
+              <div className="grid grid-cols-2 gap-3 text-sm mb-4">
+                {monitor.app_url && (
+                  <div>
+                    <p className="text-xs text-muted-foreground mb-1">App</p>
+                    <a href={monitor.app_url} target="_blank" rel="noopener noreferrer"
+                      className="text-sm text-[var(--accent-cyan)] hover:underline break-all">
+                      {monitor.app_url}
+                    </a>
+                  </div>
+                )}
+                {"api_url" in monitor && monitor.api_url && (
+                  <div>
+                    <p className="text-xs text-muted-foreground mb-1">API</p>
+                    <a href={monitor.api_url as string} target="_blank" rel="noopener noreferrer"
+                      className="text-sm text-[var(--accent-cyan)] hover:underline break-all">
+                      {monitor.api_url as string}
+                    </a>
+                  </div>
+                )}
+                <div>
+                  <p className="text-xs text-muted-foreground mb-1">Session</p>
+                  <code className="text-xs bg-muted px-1.5 py-0.5 rounded font-mono">{monitor.session}</code>
+                </div>
+                <div>
+                  <p className="text-xs text-muted-foreground mb-1">Interval</p>
+                  <p className="text-sm">{monitor.interval}</p>
+                </div>
+              </div>
+
+              {monitor.repos.length > 0 && (
+                <div className="mb-4">
+                  <p className="text-xs text-muted-foreground mb-2">Repos watched</p>
+                  <div className="flex flex-wrap gap-2">
+                    {monitor.repos.map((repo) => (
+                      <a key={repo} href={`https://github.com/${repo}`} target="_blank" rel="noopener noreferrer"
+                        className="text-xs bg-muted px-2 py-0.5 rounded hover:bg-muted/70 transition-colors font-mono text-[var(--accent-cyan)]">
+                        {repo}
+                      </a>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              <div className="pt-4 border-t border-border">
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm">
-                  {monitor.app_url && (
-                    <div>
-                      <p className="text-xs text-muted-foreground mb-1">App</p>
-                      <a href={monitor.app_url} target="_blank" rel="noopener noreferrer"
-                        className="text-blue-500 hover:underline break-all">
-                        {monitor.app_url}
-                      </a>
-                    </div>
-                  )}
-                  {"api_url" in monitor && monitor.api_url && (
-                    <div>
-                      <p className="text-xs text-muted-foreground mb-1">API</p>
-                      <a href={monitor.api_url as string} target="_blank" rel="noopener noreferrer"
-                        className="text-blue-500 hover:underline break-all">
-                        {monitor.api_url as string}
-                      </a>
-                    </div>
-                  )}
                   <div>
-                    <p className="text-xs text-muted-foreground mb-1">Session</p>
-                    <code className="text-xs bg-muted px-1.5 py-0.5 rounded">{monitor.session}</code>
-                  </div>
-                  <div>
-                    <p className="text-xs text-muted-foreground mb-1">Interval</p>
-                    <p>{monitor.interval}</p>
-                  </div>
-                  {monitor.repos.length > 0 && (
-                    <div className="sm:col-span-2">
-                      <p className="text-xs text-muted-foreground mb-1">Repos watched</p>
-                      <div className="flex flex-wrap gap-2">
-                        {monitor.repos.map((repo) => (
-                          <a key={repo} href={`https://github.com/${repo}`} target="_blank" rel="noopener noreferrer"
-                            className="text-xs bg-muted px-2 py-0.5 rounded hover:bg-muted/70 transition-colors font-mono">
-                            {repo}
-                          </a>
-                        ))}
-                      </div>
-                    </div>
-                  )}
-                  <div className="sm:col-span-2">
-                    <p className="text-xs text-muted-foreground mb-1">Trigger</p>
-                    <p className="text-sm">{monitor.trigger}</p>
-                  </div>
-                </div>
-
-                <div className="pt-2 border-t grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm">
-                  <div>
-                    <p className="text-xs text-muted-foreground mb-2">What it tests</p>
+                    <p className="text-xs text-muted-foreground mb-2">Tests</p>
                     <ul className="space-y-1">
                       {monitor.test_types.map((t, i) => (
-                        <li key={i} className="text-xs text-muted-foreground flex gap-1.5">
-                          <span className="text-foreground mt-0.5">·</span> {t}
+                        <li key={i} className="text-xs text-muted-foreground flex gap-2">
+                          <span className="text-[var(--accent-cyan)]">→</span> {t}
                         </li>
                       ))}
                     </ul>
@@ -116,21 +114,21 @@ export default function ArchitecturePage() {
                     <p className="text-xs text-muted-foreground mb-2">Stack</p>
                     <div className="flex flex-wrap gap-1.5">
                       {monitor.stack.map((s, i) => (
-                        <span key={i} className="text-xs bg-muted px-2 py-0.5 rounded">{s}</span>
+                        <span key={i} className="text-xs bg-muted px-2 py-0.5 rounded font-mono">{s}</span>
                       ))}
                     </div>
                     {monitor.log && (
                       <div className="mt-3">
                         <p className="text-xs text-muted-foreground mb-1">Log</p>
-                        <code className="text-xs bg-muted px-1.5 py-0.5 rounded">{monitor.log}</code>
+                        <code className="text-xs bg-muted px-1.5 py-0.5 rounded font-mono">{monitor.log}</code>
                       </div>
                     )}
                   </div>
                 </div>
               </div>
-            ))}
-          </div>
-        </section>
+            </div>
+          ))}
+        </div>
       </div>
     </main>
   );
