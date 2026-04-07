@@ -15,18 +15,18 @@ export default function ArchitecturePage() {
         <h1 className="text-2xl font-bold tracking-tight font-heading mb-2" style={{ letterSpacing: "-0.02em" }}>
           Architecture
         </h1>
-        <p className="text-muted-foreground text-sm mb-8 font-mono">
+        <p className="text-muted-foreground text-sm mb-8">
           Hypersphere monitoring stack
         </p>
 
         <div className="rounded-lg bg-card border border-border p-5 mb-8">
-          <h2 className="text-xs text-muted-foreground uppercase tracking-wider font-mono mb-3">Pipeline</h2>
-          <p className="text-sm text-muted-foreground mb-5 font-mono">{architecture.pipeline.description}</p>
+          <h2 className="text-sm text-muted-foreground uppercase tracking-wider font-heading mb-3">Pipeline</h2>
+          <p className="text-sm text-muted-foreground mb-5">{architecture.pipeline.description}</p>
           <div className="flex flex-wrap items-center gap-2">
             {architecture.pipeline.steps.map((step, i) => (
               <div key={i} className="flex items-center gap-2">
                 <div className="rounded bg-muted px-3 py-2">
-                  <p className="text-sm font-mono">{step.label}</p>
+                  <p className="text-sm">{step.label}</p>
                   <p className="text-xs text-muted-foreground">{step.detail}</p>
                 </div>
                 {i < architecture.pipeline.steps.length - 1 && (
@@ -45,7 +45,7 @@ export default function ArchitecturePage() {
               <div className="flex items-start justify-between mb-4">
                 <div>
                   <h3 className="font-semibold font-heading text-lg">{monitor.name}</h3>
-                  <p className="text-sm text-muted-foreground mt-1 font-mono">{monitor.purpose}</p>
+                  <p className="text-sm text-muted-foreground mt-1">{monitor.purpose}</p>
                 </div>
                 <Link
                   href={`/monitor/${monitor.id}`}
@@ -76,7 +76,7 @@ export default function ArchitecturePage() {
                 )}
                 <div>
                   <p className="text-xs text-muted-foreground mb-1">Session</p>
-                  <code className="text-xs bg-muted px-1.5 py-0.5 rounded font-mono">{monitor.session}</code>
+                  <code className="text-xs bg-muted px-1.5 py-0.5 rounded">{monitor.session}</code>
                 </div>
                 <div>
                   <p className="text-xs text-muted-foreground mb-1">Interval</p>
@@ -90,7 +90,7 @@ export default function ArchitecturePage() {
                   <div className="flex flex-wrap gap-2">
                     {monitor.repos.map((repo) => (
                       <a key={repo} href={`https://github.com/${repo}`} target="_blank" rel="noopener noreferrer"
-                        className="text-xs bg-muted px-2 py-0.5 rounded hover:bg-muted/70 transition-colors font-mono text-[var(--accent-cyan)]">
+                        className="text-xs bg-muted px-2 py-0.5 rounded hover:bg-muted/70 transition-colors text-[var(--accent-cyan)]">
                         {repo}
                       </a>
                     ))}
@@ -114,13 +114,13 @@ export default function ArchitecturePage() {
                     <p className="text-xs text-muted-foreground mb-2">Stack</p>
                     <div className="flex flex-wrap gap-1.5">
                       {monitor.stack.map((s, i) => (
-                        <span key={i} className="text-xs bg-muted px-2 py-0.5 rounded font-mono">{s}</span>
+                        <span key={i} className="text-xs bg-muted px-2 py-0.5 rounded">{s}</span>
                       ))}
                     </div>
                     {monitor.log && (
                       <div className="mt-3">
                         <p className="text-xs text-muted-foreground mb-1">Log</p>
-                        <code className="text-xs bg-muted px-1.5 py-0.5 rounded font-mono">{monitor.log}</code>
+                        <code className="text-xs bg-muted px-1.5 py-0.5 rounded">{monitor.log}</code>
                       </div>
                     )}
                   </div>

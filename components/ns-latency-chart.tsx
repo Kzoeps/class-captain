@@ -60,7 +60,7 @@ export function NsLatencyChart({ logs }: NsLatencyChartProps) {
 
   return (
     <div className="rounded-lg bg-card border border-border p-5 mb-6">
-      <h2 className="text-xs text-muted-foreground uppercase tracking-wider font-mono mb-4">
+      <h2 className="text-sm text-muted-foreground uppercase tracking-wider font-heading mb-4">
         Namespace Query Latency
       </h2>
       <div className="h-56">
@@ -113,7 +113,7 @@ export function NsLatencyChart({ logs }: NsLatencyChartProps) {
         {NAMESPACES.map((ns) => (
           <div key={ns.key} className="flex items-center gap-2">
             <span className="w-2 h-0.5 bg-[#27272a] rounded" style={{ backgroundColor: ns.color }} />
-            <span className="text-xs text-muted-foreground font-mono">{ns.key}</span>
+            <span className="text-xs text-muted-foreground">{ns.key}</span>
           </div>
         ))}
       </div>

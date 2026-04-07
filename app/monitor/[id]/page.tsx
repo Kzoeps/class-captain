@@ -64,7 +64,7 @@ export default async function MonitorDetailPage({
               {monitor.name}
             </h1>
             {monitor.description && (
-              <p className="text-muted-foreground text-sm mt-1 font-mono">{monitor.description}</p>
+              <p className="text-muted-foreground text-sm mt-1">{monitor.description}</p>
             )}
           </div>
           {latest && <StatusBadge status={latest.status} large />}
@@ -73,7 +73,7 @@ export default async function MonitorDetailPage({
         {latest ? (
           <div className="rounded-lg bg-card border border-border p-5 mb-6">
             <div className="flex items-center gap-2 mb-4">
-              <span className="text-xs text-muted-foreground uppercase tracking-wider font-mono">Latest</span>
+              <span className="text-sm text-muted-foreground uppercase tracking-wider font-heading">Latest</span>
               <span className="text-xs text-muted-foreground">
                 {formatDistanceToNow(new Date(latest.last_check), { addSuffix: true })}
               </span>
@@ -84,7 +84,7 @@ export default async function MonitorDetailPage({
                 <div className="flex items-center justify-between">
                   <span className="text-sm text-muted-foreground">Last run</span>
                   <div className="flex items-center gap-2">
-                    <span className="text-sm font-mono">
+                    <span className="text-sm">
                       {formatDistanceToNow(new Date(latest.last_run), { addSuffix: true })}
                     </span>
                     {latest.last_run_outcome && (
@@ -98,7 +98,7 @@ export default async function MonitorDetailPage({
                 <div className="space-y-1">
                   <div className="flex items-center justify-between">
                     <span className="text-sm text-muted-foreground">Commit</span>
-                    <code className="text-xs font-mono bg-muted px-2 py-1 rounded">
+                    <code className="text-xs bg-muted px-2 py-1 rounded">
                       {latest.last_commit_sha}
                     </code>
                   </div>
@@ -127,13 +127,13 @@ export default async function MonitorDetailPage({
 
             {latest.notes && (
               <div className="mt-4 pt-4 border-t border-border">
-                <p className="text-sm text-muted-foreground font-mono">{latest.notes}</p>
+                <p className="text-sm text-muted-foreground">{latest.notes}</p>
               </div>
             )}
 
             {latest.linear_issues_filed && latest.linear_issues_filed.length > 0 && (
               <div className="mt-4 pt-4 border-t border-border">
-                <p className="text-xs text-muted-foreground mb-2 uppercase tracking-wider font-mono">Issues</p>
+                <p className="text-sm text-muted-foreground mb-2 uppercase tracking-wider font-heading">Issues</p>
                 <div className="flex flex-wrap gap-2">
                   {latest.linear_issues_filed.map((issue: string) => (
                     <a
@@ -141,7 +141,7 @@ export default async function MonitorDetailPage({
                       href={`https://linear.app/issue/${issue}`}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="text-xs font-mono bg-muted px-2 py-1 rounded hover:bg-muted/70 transition-colors text-[var(--accent-cyan)]"
+                      className="text-xs bg-muted px-2 py-1 rounded hover:bg-muted/70 transition-colors text-[var(--accent-cyan)]"
                     >
                       {issue}
                     </a>
@@ -166,8 +166,8 @@ export default async function MonitorDetailPage({
 
         {arch && (
           <div className="rounded-lg bg-card border border-border p-5 mb-6">
-            <h2 className="text-xs text-muted-foreground uppercase tracking-wider font-mono mb-3">About</h2>
-            <p className="text-sm text-muted-foreground mb-4 font-mono">{arch.purpose}</p>
+            <h2 className="text-sm text-muted-foreground uppercase tracking-wider font-heading mb-3">About</h2>
+            <p className="text-sm text-muted-foreground mb-4">{arch.purpose}</p>
 
             <div className="grid grid-cols-2 gap-3 text-sm">
               <div>
@@ -176,7 +176,7 @@ export default async function MonitorDetailPage({
               </div>
               <div>
                 <p className="text-xs text-muted-foreground mb-1">Session</p>
-                <code className="text-xs bg-muted px-1.5 py-0.5 rounded font-mono">{arch.session}</code>
+                <code className="text-xs bg-muted px-1.5 py-0.5 rounded">{arch.session}</code>
               </div>
             </div>
 
@@ -186,7 +186,7 @@ export default async function MonitorDetailPage({
                 <div className="flex flex-wrap gap-2">
                   {arch.repos.map((repo) => (
                     <a key={repo} href={`https://github.com/${repo}`} target="_blank" rel="noopener noreferrer"
-                      className="text-xs bg-muted px-2 py-0.5 rounded hover:bg-muted/70 transition-colors font-mono text-[var(--accent-cyan)]">
+                      className="text-xs bg-muted px-2 py-0.5 rounded hover:bg-muted/70 transition-colors text-[var(--accent-cyan)]">
                       {repo}
                     </a>
                   ))}
@@ -209,7 +209,7 @@ export default async function MonitorDetailPage({
               <p className="text-xs text-muted-foreground mb-2">Stack</p>
               <div className="flex flex-wrap gap-1.5">
                 {arch.stack.map((s, i) => (
-                  <span key={i} className="text-xs bg-muted px-2 py-0.5 rounded font-mono">{s}</span>
+                  <span key={i} className="text-xs bg-muted px-2 py-0.5 rounded">{s}</span>
                 ))}
               </div>
             </div>
@@ -218,7 +218,7 @@ export default async function MonitorDetailPage({
 
         {history.length > 0 && (
           <div>
-            <h2 className="text-xs text-muted-foreground uppercase tracking-wider font-mono mb-4">
+            <h2 className="text-sm text-muted-foreground uppercase tracking-wider font-heading mb-4">
               History ({history.length})
             </h2>
             <div className="space-y-3">
@@ -229,7 +229,7 @@ export default async function MonitorDetailPage({
                 >
                   <div className="flex items-center justify-between mb-3">
                     <StatusBadge status={log.status} />
-                    <span className="text-xs text-muted-foreground font-mono">
+                    <span className="text-xs text-muted-foreground">
                       {formatDistanceToNow(new Date(log.last_check), { addSuffix: true })}
                     </span>
                   </div>
@@ -249,7 +249,7 @@ export default async function MonitorDetailPage({
                     {log.last_commit_sha && (
                       <div className="flex items-center gap-2">
                         <span className="text-xs text-muted-foreground">Commit</span>
-                        <code className="text-xs font-mono bg-muted px-1.5 py-0.5 rounded">
+                        <code className="text-xs bg-muted px-1.5 py-0.5 rounded">
                           {log.last_commit_sha}
                         </code>
                       </div>
@@ -262,7 +262,7 @@ export default async function MonitorDetailPage({
                       </div>
                     )}
                     {log.notes && (
-                      <p className="text-xs text-muted-foreground font-mono">{log.notes}</p>
+                      <p className="text-xs text-muted-foreground">{log.notes}</p>
                     )}
                     {!log.last_run && !log.last_commit_sha && log.checks_total == null && !log.notes && (
                       <p className="text-xs text-muted-foreground italic">Health check</p>
@@ -278,7 +278,7 @@ export default async function MonitorDetailPage({
                             href={`https://linear.app/issue/${issue}`}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="text-xs font-mono bg-muted px-2 py-0.5 rounded hover:bg-muted/70 transition-colors text-[var(--accent-cyan)]"
+                            className="text-xs bg-muted px-2 py-0.5 rounded hover:bg-muted/70 transition-colors text-[var(--accent-cyan)]"
                           >
                             {issue}
                           </a>

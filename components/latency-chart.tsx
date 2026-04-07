@@ -26,6 +26,11 @@ export function LatencyChart({ logs }: LatencyChartProps) {
   const data = logs
     .slice()
     .reverse()
+    .filter((log) =>
+      log.misc_data?.create_lag_ms != null ||
+      log.misc_data?.update_lag_ms != null ||
+      log.misc_data?.delete_lag_ms != null
+    )
     .map((log) => ({
       time: format(new Date(log.last_check), "HH:mm"),
       fullTime: new Date(log.last_check).toISOString(),
@@ -48,7 +53,7 @@ export function LatencyChart({ logs }: LatencyChartProps) {
 
   return (
     <div className="rounded-lg bg-card border border-border p-5 mb-6">
-      <h2 className="text-xs text-muted-foreground uppercase tracking-wider font-mono mb-4">
+      <h2 className="text-sm text-muted-foreground uppercase tracking-wider font-heading mb-4">
         Write Latency
       </h2>
       <div className="h-56">
@@ -57,6 +62,7 @@ export function LatencyChart({ logs }: LatencyChartProps) {
             <CartesianGrid strokeDasharray="3 3" stroke="#27272a" />
             <XAxis
               dataKey="time"
+              interval={Math.max(0, Math.floor(data.length / 8) - 1)}
               tick={{ fontSize: 10, fill: "#71717a", fontFamily: "var(--font-mono)" }}
               axisLine={{ stroke: "#27272a" }}
               tickLine={{ stroke: "#27272a" }}
@@ -68,9 +74,13 @@ export function LatencyChart({ logs }: LatencyChartProps) {
               tickFormatter={(v) => `${(v / 1000).toFixed(1)}s`}
             />
             <Tooltip
-              labelFormatter={(_, payload) => payload?.[0]?.payload?.fullTime ?? ""}
-              formatter={(value) => [
+              labelFormatter={(_, payload) => {
+                const iso = payload?.[0]?.payload?.fullTime;
+                return iso ? format(new Date(iso), "MMM d, HH:mm") : "";
+              }}
+              formatter={(value, name) => [
                 value != null ? `${Number(value).toLocaleString()}ms` : "N/A",
+                name,
               ]}
               contentStyle={{
                 backgroundColor: "#111116",
@@ -101,7 +111,7 @@ export function LatencyChart({ logs }: LatencyChartProps) {
         {LINES.map((line) => (
           <div key={line.key} className="flex items-center gap-2">
             <span className="w-2 h-0.5 bg-[#27272a] rounded" style={{ backgroundColor: line.color }} />
-            <span className="text-xs text-muted-foreground font-mono">{line.label}</span>
+            <span className="text-xs text-muted-foreground">{line.label}</span>
           </div>
         ))}
       </div>

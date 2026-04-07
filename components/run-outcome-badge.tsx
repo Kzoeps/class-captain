@@ -10,7 +10,7 @@ const config: Record<RunOutcome, { label: string; text: string; bg: string }> = 
 export function RunOutcomeBadge({ outcome }: { outcome: RunOutcome }) {
   const { label, text, bg } = config[outcome];
   return (
-    <span className={cn("inline-flex items-center rounded px-1.5 py-0.5 text-[10px] font-mono uppercase tracking-wider", text, bg)}>
+    <span className={cn("inline-flex items-center rounded px-1.5 py-0.5 text-[10px] uppercase tracking-wider", text, bg)}>
       {label}
     </span>
   );

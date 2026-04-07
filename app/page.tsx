@@ -44,7 +44,7 @@ export default async function DashboardPage() {
               Class Captain
             </h1>
           </div>
-          <p className="text-muted-foreground text-sm font-mono">
+          <p className="text-muted-foreground text-sm">
             Hypersphere · ATProto ecosystem monitor
           </p>
         </header>
@@ -70,7 +70,7 @@ export default async function DashboardPage() {
             </div>
           )}
           <div className="ml-auto">
-            <span className="text-[10px] text-muted-foreground font-mono">
+            <span className="text-[10px] text-muted-foreground">
               refreshes 30s
             </span>
           </div>
