@@ -47,9 +47,6 @@ export default async function DashboardPage() {
             </a>
           </div>
         </div>
-        <div className="mb-6 rounded-lg border border-yellow-500/30 bg-yellow-500/10 px-4 py-3 text-sm text-yellow-600 dark:text-yellow-400">
-          ⏸ Monitoring is currently on hold. All agents are paused.
-        </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           {monitorsWithStatus.map((monitor) => (
             <MonitorCard key={monitor.id} monitor={monitor} />
