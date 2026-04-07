@@ -30,10 +30,20 @@ export interface MonitorWithStatus extends Monitor {
   latest: StatusLog | null;
 }
 
+export interface IntegrityCheckData {
+  ns_latency_avg_ms?: {
+    "org.hypercerts"?: number;
+    "org.hyperboards"?: number;
+    "app.certified"?: number;
+    "app.gainforest"?: number;
+  } | null;
+}
+
 export interface MiscData {
   create_lag_ms?: number | null;
   update_lag_ms?: number | null;
   delete_lag_ms?: number | null;
+  integrity_check?: IntegrityCheckData | null;
 }
 
 export interface StatusLogWithMiscData extends StatusLog {

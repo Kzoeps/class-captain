@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import { StatusBadge } from "@/components/status-badge";
 import { RunOutcomeBadge } from "@/components/run-outcome-badge";
 import { LatencyChart } from "@/components/latency-chart";
+import { NsLatencyChart } from "@/components/ns-latency-chart";
 import { formatDistanceToNow } from "date-fns";
 import Link from "next/link";
 import type { StatusLogWithMiscData } from "@/lib/types";
@@ -40,6 +41,9 @@ export default async function MonitorDetailPage({
   const latest = logs?.[0] ?? null;
   const history = logs?.slice(1) ?? [];
   const latencyLogs = logs as StatusLogWithMiscData[] | null;
+  const nsLatencyLogs = latencyLogs?.filter(
+    (log) => log.misc_data?.integrity_check?.ns_latency_avg_ms != null
+  ) ?? null;
 
   return (
     <main className="min-h-screen grid-bg">
@@ -154,6 +158,10 @@ export default async function MonitorDetailPage({
 
         {isHyperindex && latencyLogs && latencyLogs.length > 0 && (
           <LatencyChart logs={latencyLogs} />
+        )}
+
+        {isHyperindex && nsLatencyLogs && nsLatencyLogs.length > 0 && (
+          <NsLatencyChart logs={nsLatencyLogs} />
         )}
 
         {arch && (

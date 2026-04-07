@@ -36,3 +36,17 @@
     at flushComponentPerformance (http://localhost:3001/_next/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_0p3wegg._.js:2156:31)
     at flushInitialRenderPerformance (http://localhost:3001/_next/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_0p3wegg._.js:2346:74)
 [  782746ms] [WARNING] The resource http://localhost:3001/_next/static/media/70bc3e132a0a741e-s.p.1409xf.ylxg8g.woff2 was preloaded using link preload but not used within a few seconds from the window's load event. Please make sure it has an appropriate `as` value and it is preloaded intentionally. @ http://localhost:3001/:0
+[14299285ms] [WARNING] [Fast Refresh] performing full reload because your application had an unrecoverable error @ http://localhost:3001/_next/static/chunks/node_modules_next_dist_115brz8._.js:2431
+[14299325ms] [ERROR] Failed to load resource: the server responded with a status of 500 (Internal Server Error) @ http://localhost:3001/:0
+[14299362ms] Error: Invalid supabaseUrl: Must be a valid HTTP or HTTPS URL.
+    at createClient (about://React/Server/file:///Users/karma/class-captain/website/.next/dev/server/chunks/ssr/%5Broot-of-the-server%5D__0vvtuta._.js?0:40:208)
+    at  DashboardPage (about://React/Server/file:///Users/karma/class-captain/website/.next/dev/server/chunks/ssr/%5Broot-of-the-server%5D__0vvtuta._.js?1:445:22)
+    at resolveErrorDev (http://localhost:3001/_next/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_0p3wegg._.js:1919:105)
+    at processFullStringRow (http://localhost:3001/_next/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_0p3wegg._.js:2434:29)
+    at processFullBinaryRow (http://localhost:3001/_next/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_0p3wegg._.js:2393:9)
+    at processBinaryChunk (http://localhost:3001/_next/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_0p3wegg._.js:2502:221)
+    at progress (http://localhost:3001/_next/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_0p3wegg._.js:2689:13)
+[14299454ms] TypeError: Failed to execute 'measure' on 'Performance': '​DashboardPage' cannot have a negative time stamp.
+    at flushComponentPerformance (http://localhost:3001/_next/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_0p3wegg._.js:2184:45)
+    at flushComponentPerformance (http://localhost:3001/_next/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_0p3wegg._.js:2156:31)
+    at flushInitialRenderPerformance (http://localhost:3001/_next/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_0p3wegg._.js:2346:74)
