@@ -3,9 +3,11 @@ import architecture from "@/data/architecture.json";
 import { notFound } from "next/navigation";
 import { StatusBadge } from "@/components/status-badge";
 import { RunOutcomeBadge } from "@/components/run-outcome-badge";
+import { LatencyChart } from "@/components/latency-chart";
 import { formatDistanceToNow } from "date-fns";
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
+import type { StatusLogWithMiscData } from "@/lib/types";
 
 export const revalidate = 30;
 
@@ -26,15 +28,19 @@ export default async function MonitorDetailPage({
 
   if (!monitor) notFound();
 
+  const isHyperindex = id === "hyperindex";
+  const logLimit = isHyperindex ? 96 : 50;
+
   const { data: logs } = await supabase
     .from("status_logs")
     .select("*")
     .eq("monitor_id", id)
     .order("created_at", { ascending: false })
-    .limit(50);
+    .limit(logLimit);
 
   const latest = logs?.[0] ?? null;
   const history = logs?.slice(1) ?? [];
+  const latencyLogs = logs as StatusLogWithMiscData[] | null;
 
   return (
     <main className="min-h-screen bg-background">
@@ -136,6 +142,10 @@ export default async function MonitorDetailPage({
           <div className="rounded-lg border bg-muted/40 p-6 mb-8 text-center text-muted-foreground text-sm">
             No status logged yet.
           </div>
+        )}
+
+        {isHyperindex && latencyLogs && latencyLogs.length > 0 && (
+          <LatencyChart logs={latencyLogs} />
         )}
 
         {arch && (

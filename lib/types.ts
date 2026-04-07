@@ -29,3 +29,13 @@ export interface StatusLog {
 export interface MonitorWithStatus extends Monitor {
   latest: StatusLog | null;
 }
+
+export interface MiscData {
+  create_lag_ms?: number | null;
+  update_lag_ms?: number | null;
+  delete_lag_ms?: number | null;
+}
+
+export interface StatusLogWithMiscData extends StatusLog {
+  misc_data: MiscData | null;
+}
