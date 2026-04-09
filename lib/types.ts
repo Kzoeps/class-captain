@@ -44,6 +44,7 @@ export interface MiscData {
   update_lag_ms?: number | null;
   delete_lag_ms?: number | null;
   integrity_check?: IntegrityCheckData | null;
+  failed_checks?: string[] | null;
 }
 
 export interface StatusLogWithMiscData extends StatusLog {

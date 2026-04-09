@@ -125,6 +125,19 @@ export default async function MonitorDetailPage({
               )}
             </div>
 
+            {(latest as StatusLogWithMiscData).misc_data?.failed_checks?.length ? (
+              <div className="mt-4 pt-4 border-t border-border">
+                <p className="text-xs text-muted-foreground uppercase tracking-wider font-mono mb-2">Failed checks</p>
+                <ul className="space-y-1">
+                  {(latest as StatusLogWithMiscData).misc_data!.failed_checks!.map((check, i) => (
+                    <li key={i} className="text-xs font-mono text-[var(--status-failing)] flex gap-2">
+                      <span>✗</span><span>{check}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ) : null}
+
             {latest.notes && (
               <div className="mt-4 pt-4 border-t border-border">
                 <p className="text-sm text-muted-foreground">{latest.notes}</p>
